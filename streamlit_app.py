@@ -51,3 +51,7 @@ my_cur.execute("select * from fruit_load_list")
 my_data_rows = my_cur.fetchall()
 streamlit.text("The fruit laod list contains:")
 streamlit.text(my_data_rows)
+
+streamlit.wrtie('Thanks for adding ', add_my_fruit)
+#This will not work correctly, but just go with it for now
+my_cur.execute("insert into fruit_load_list values ('from streamlit')")
