@@ -63,19 +63,38 @@ streamlit.write('The user entered ', fruit_choice)
 #import requests
 fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
 
-
 #dont run anything past here while we troubleshoot 
-streamlit.stop()
+#streamlit.stop()
 
 #import snowflake.connector
-
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-my_cur.execute("select * from fruit_load_list")
-my_data_rows = my_cur.fetchall()
-streamlit.text("The fruit laod list contains:")
-streamlit.text(my_data_rows)
-
-streamlit.wrtie('Thanks for adding ', add_my_fruit)
+#my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+#my_cur = my_cnx.cursor()
+#my_cur.execute("select * from fruit_load_list")
+#my_data_rows = my_cur.fetchall()
+#streamlit.text("The fruit laod list contains:")
+#streamlit.text(my_data_rows)
+streamlit.header("The Fruit load list contains:")
+#Snowfflake-related functions:
+def get_fruit_load_list():
+    with mycnx.cursor() as my_cur:
+         my_cur.execute("select * from fruit_load_list")
+         return my_cur.fetchall()
+#add a button to load the fruit
+if streamlit.button('Get Fruit Load List'):
+    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+    my_data_rows = get_fruit_load_list()
+    streamlit.dataframe(my_data_rows)
+#allow the end user to add a fruit to the list
+#add_fruit = streamlit.text_input('What fruit would you like to add')
+def insert_row_snowflake(new_fruit):
+    with my_cnx.cursor() as my_cur:
+         my_cur.execute("insert into fruit_load_list values ('from streamlit')")
+         return "Thanks for adding " + new_fruit
+add_my_fruit = streamlit.text_input('What fruit would you like to add?')
+if streamlit.button('Add a Fruit to the List'):
+    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+    back_from_function = insert_row__snowflake(add_my_fruit)
+    streamlit.text(back_from_function)
+streamlit.write('Thanks for adding ', add_my_fruit)
 #This will not work correctly, but just go with it for now
-my_cur.execute("insert into fruit_load_list values ('from streamlit')")
+#my_cur.execute("insert into fruit_load_list values ('from streamlit')")
