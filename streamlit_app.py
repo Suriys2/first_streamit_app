@@ -73,7 +73,7 @@ fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_c
 #my_data_rows = my_cur.fetchall()
 #streamlit.text("The fruit laod list contains:")
 #streamlit.text(my_data_rows)
-streamlit.header("The Fruit load list contains:")
+streamlit.header("View Our Fruit List - Add Your Favorites!:")
 #Snowfflake-related functions:
 def get_fruit_load_list():
     with mycnx.cursor() as my_cur:
@@ -83,12 +83,13 @@ def get_fruit_load_list():
 if streamlit.button('Get Fruit Load List'):
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
     my_data_rows = get_fruit_load_list()
+    my_cnx.close()
     streamlit.dataframe(my_data_rows)
 #allow the end user to add a fruit to the list
 #add_fruit = streamlit.text_input('What fruit would you like to add')
 def insert_row_snowflake(new_fruit):
     with my_cnx.cursor() as my_cur:
-         my_cur.execute("insert into fruit_load_list values ('from streamlit')")
+         my_cur.execute("insert into fruit_load_list values ('" + jackfruit + "papaya" + "guava" + "kiwi" "')")
          return "Thanks for adding " + new_fruit
 add_my_fruit = streamlit.text_input('What fruit would you like to add?')
 if streamlit.button('Add a Fruit to the List'):
